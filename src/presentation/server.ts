@@ -14,19 +14,21 @@ export class Server {
     public static start(){
         console.log('Server started...');
 
-        CronService.createJob(
-            '*/5 * * * * *',
-            () => {
-                // let url = 'https://google.com';
-                let url = 'http://localhost:3000';
+        // Mandar correo
 
-                new CheckService(
-                    fileSystemLogRepository,
-                    () => console.log(`${url} is ok`),
-                    ( error ) => console.log( error ),
-                ).execute(url);
-                // new CheckService().execute('http://localhost:3000');
-            }
-        );
+        // CronService.createJob(
+        //     '*/5 * * * * *',
+        //     () => {
+        //         // let url = 'https://google.com';
+        //         let url = 'http://localhost:3000';
+
+        //         new CheckService(
+        //             fileSystemLogRepository,
+        //             () => console.log(`${url} is ok`),
+        //             ( error ) => console.log( error ),
+        //         ).execute(url);
+        //         // new CheckService().execute('http://localhost:3000');
+        //     }
+        // );
     }
 }
