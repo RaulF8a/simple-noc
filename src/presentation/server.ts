@@ -1,16 +1,25 @@
 import { LogSeverityLevel } from "../domain/entities/log.entity";
+import { CheckServiceMultiple } from "../domain/use-cases/checks/check-service-multiple.use-case";
 import { CheckService } from "../domain/use-cases/checks/check-service.use-case";
 import { SendEmailLogs } from "../domain/use-cases/email/send-email-logs.use-case";
 import { FileSystemDatasource } from "../infrastructure/datasource/file-system.datasource";
 import { MongoLogDataSource } from "../infrastructure/datasource/mongo-log.datasource";
+import { PostgresLogDataSource } from "../infrastructure/datasource/postgres-log.datasource";
 import { LogRepositoryImplementation } from "../infrastructure/repositories/log.repository";
 import { CronService } from "./cron/cron-service";
 import { EmailService } from "./email/email.service";
 
 // Instancias de repositorios.
-const logRepository = new LogRepositoryImplementation( 
+const fsLogRepository = new LogRepositoryImplementation( 
     new FileSystemDatasource(),
-    // new MongoLogDataSource(),
+);
+
+const mongoLogRepository = new LogRepositoryImplementation( 
+    new MongoLogDataSource(),
+);
+
+const postgresLogRepository = new LogRepositoryImplementation( 
+    new PostgresLogDataSource(),
 );
 
 // Instancias de servicio.
@@ -27,23 +36,23 @@ export class Server {
         //     fileSystemLogRepository
         // ).execute(['']);
 
-        // CronService.createJob(
-        //     '*/5 * * * * *',
-        //     () => {
-        //         let url = 'https://google.com';
-        //         // let url = 'http://localhost:3000';
+        CronService.createJob(
+            '*/5 * * * * *',
+            () => {
+                // let url = 'https://google.com';
+                let url = 'http://localhost:3000';
 
-        //         new CheckService(
-        //             logRepository,
-        //             () => console.log(`${url} is ok`),
-        //             ( error ) => console.log( error ),
-        //         ).execute(url);
-        //         // new CheckService().execute('http://localhost:3000');
-        //     }
-        // );
+                new CheckServiceMultiple(
+                    [ fsLogRepository, postgresLogRepository, mongoLogRepository ],
+                    () => console.log(`${url} is ok`),
+                    ( error ) => console.log( error ),
+                ).execute(url);
+                // new CheckService().execute('http://localhost:3000');
+            }
+        );
     
-        const logs = await logRepository.getLogs(LogSeverityLevel.medium);
+        // const logs = await logRepository.getLogs(LogSeverityLevel.medium);
 
-        console.log(logs);
+        // console.log(logs);
     }
 }

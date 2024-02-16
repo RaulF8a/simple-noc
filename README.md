@@ -22,15 +22,10 @@ Colocarse en el directorio del proyecto.
   cd simple-noc
 ```
 
-A partir de la plantilla, crear un archivo .env con las siguientes variables:
-
-`PORT`
-
-`MAILER_EMAIL`
-
-`MAILER_SECRET_KEY`
-
-`PROD`
+A partir de la plantilla, crear un archivo .env con las variables indicadas. Luego, levantar las bases de datos con Docker.
+```bash
+  docker compose up -d
+```
 
 Instalar las dependencias.
 
