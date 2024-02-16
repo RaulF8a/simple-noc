@@ -26,7 +26,23 @@ export class LogEntity {
     }
     
     static fromJson = (jsonData: string): LogEntity => {
+        jsonData = ( jsonData === '' ) ? '{}': jsonData;
+
         const { message, level, createdAt, origin } = JSON.parse(jsonData);
+
+        const log = new LogEntity({
+            message, 
+            level, 
+            createdAt,
+            origin,
+        });
+
+        return log;
+    }
+
+    // El tipado indica que se recibe un objeto cuya key es cualquier string y el valor any.
+    static fromObject = ( object: { [key: string]: any }): LogEntity => {
+        const { message, level, createdAt, origin } = object;
 
         const log = new LogEntity({
             message, 
