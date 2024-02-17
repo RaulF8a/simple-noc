@@ -1,6 +1,10 @@
 node_modules/
 logs/
-mongo/
-postgres/
+mongo-volume/
+postgres-volume/
+mongo-test/
+postgres-test/
+coverage/
 
 .env
+.env.test
