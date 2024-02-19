@@ -1,3 +1,4 @@
+import { envs } from "../config/plugins/envs.plugin";
 import { LogSeverityLevel } from "../domain/entities/log.entity";
 import { CheckServiceMultiple } from "../domain/use-cases/checks/check-service-multiple.use-case";
 import { CheckService } from "../domain/use-cases/checks/check-service.use-case";
@@ -31,28 +32,25 @@ export class Server {
     public static async start(){
         console.log('Server started...');
         
-        // new SendEmailLogs(
-        //     emailService,
-        //     fileSystemLogRepository
-        // ).execute(['']);
-
         CronService.createJob(
             '*/5 * * * * *',
             () => {
-                // let url = 'https://google.com';
-                let url = 'http://localhost:3000';
-
                 new CheckServiceMultiple(
                     [ fsLogRepository, postgresLogRepository, mongoLogRepository ],
-                    () => console.log(`${url} is ok`),
+                    () => console.log(`${envs.SERVICE_URL} is ok`),
                     ( error ) => console.log( error ),
-                ).execute(url);
-                // new CheckService().execute('http://localhost:3000');
+                ).execute(envs.SERVICE_URL);
             }
         );
-    
-        // const logs = await logRepository.getLogs(LogSeverityLevel.medium);
-
-        // console.log(logs);
+        
+        CronService.createJob(
+            '00 00 00 * * *',
+            () => {
+                new SendEmailLogs(
+                    emailService,
+                    postgresLogRepository
+                ).execute(['logs-email@google.com']);
+            }
+        );
     }
 }

@@ -1,12 +1,10 @@
 # Simple NOC
 
 Aplicación de monitoreo que continuamente revisa el estado de un servicio, guarda los *logs* en un archivo o base
-de datos, y envia correos cuando ocurre algún error. Desarrollada con Node.js y TypeScript.
+de datos, y los envia por correo a la media noche de cada dia. Desarrollada con Node.js y TypeScript.
 
 **Conocimientos adquiridos:** Patrón repositorio, inyección de dependencias, monitoreo, MongoDB,
 PostgreSQL, NodeMailer.
-
-**Referencia:** Curso "Node.js: De cero a experto" impartido por Fernando Herrera en la plataforma DevTalles.
 
 ## Instalación
 
@@ -31,6 +29,11 @@ Instalar las dependencias.
 
 ```bash
   npm install
+```
+
+Reconstruir el cliente de Prisma.
+```
+npx prisma migrate dev
 ```
 
 Correr en modo de desarrollo.
