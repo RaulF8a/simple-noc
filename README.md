@@ -33,7 +33,7 @@ Instalar las dependencias.
 
 Reconstruir el cliente de Prisma.
 ```
-npx prisma migrate dev
+npx prisma migrate dev --name init
 ```
 
 Correr en modo de desarrollo.
